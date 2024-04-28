@@ -44,7 +44,7 @@ async function run() {
       const result = await craftsCollection.findOne(query);
       res.send(result);
     });
-    app.put("/crafts/:id", async(req, res) => {
+    app.put("/crafts/:id", async (req, res) => {
       const id = req.params.id;
       const craft = req.body;
       console.log(craft);
@@ -65,8 +65,12 @@ async function run() {
           description: craft.description,
         },
       };
-      const result =await craftsCollection.updateOne(filter,updateDoc,options)
-      res.send(result)
+      const result = await craftsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
     });
     //  my Craft add list
     app.get("/myCrafts/:email", async (req, res) => {
@@ -76,7 +80,13 @@ async function run() {
         .toArray();
       res.send(result);
     });
-
+    app.delete("/crafts/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log('Database delete ',id)
+      const query = { _id : new ObjectId(id) };
+      const result = await craftsCollection.deleteOne(query);
+      res.send(result);
+    });
     app.post("/crafts", async (req, res) => {
       const craft = req.body;
       console.log("craft post", craft);
