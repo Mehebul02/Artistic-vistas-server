@@ -44,13 +44,38 @@ async function run() {
       const result = await craftsCollection.findOne(query);
       res.send(result);
     });
-//  my Craft add list 
-    app.get('/myCrafts/:email',async(req,res)=>{
-      console.log(req.params.email)
-      const result =await craftsCollection.find({email:req.params.email}).toArray()
+    app.put("/crafts/:id", async(req, res) => {
+      const id = req.params.id;
+      const craft = req.body;
+      console.log(craft);
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          image: craft.image,
+          itemName: craft.itemName,
+          subcategoryName: craft.subcategoryName,
+          price: craft.price,
+          rating: craft.rating,
+          customization: craft.customization,
+          processingTime: craft.processingTime,
+          stockStatus: craft.stockStatus,
+          email: craft.email,
+          name: craft.name,
+          description: craft.description,
+        },
+      };
+      const result =await craftsCollection.updateOne(filter,updateDoc,options)
       res.send(result)
-    })
-    
+    });
+    //  my Craft add list
+    app.get("/myCrafts/:email", async (req, res) => {
+      console.log(req.params.email);
+      const result = await craftsCollection
+        .find({ email: req.params.email })
+        .toArray();
+      res.send(result);
+    });
 
     app.post("/crafts", async (req, res) => {
       const craft = req.body;
