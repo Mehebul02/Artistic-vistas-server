@@ -34,13 +34,25 @@ async function run() {
     const database = client.db("craftsDB");
     const craftsCollection = database.collection("crafts");
     const subcategoriesCollection = client
-      .db("craftDB")
+      .db("subcategoriesDB")
       .collection("subcategories");
     app.get("/crafts", async (req, res) => {
       const query = craftsCollection.find();
       const result = await query.toArray();
       res.send(result);
     });
+    app.get("/subcategories", async (req, res) => {
+      const query = subcategoriesCollection.find();
+      const result = await query.toArray();
+      res.send(result);
+    });
+    // app.get("/subcategories/:itemName", async (req, res) => {
+    //   console.log(req.params.itemName);
+    //   const result = await craftsCollection
+    //     .find({ itemName: req.params.itemName })
+    //     .toArray();
+    //   res.send(result);
+    // });
     app.get("/crafts/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -96,12 +108,12 @@ async function run() {
       const result = await craftsCollection.insertOne(craft);
       res.send(result);
     });
-    app.post("/subcategories", async (req, res) => {
-      const subcat = req.body;
-      console.log("subcategories post", subcat);
-      const result = await subcategoriesCollection.insertOne(subcat);
-      res.send(result);
-    });
+    // app.post("/subcategories", async (req, res) => {
+    //   const subcat = req.body;
+    //   console.log("subcategories post", subcat);
+    //   const result = await subcategoriesCollection.insertOne(subcat);
+    //   res.send(result);
+    // });
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
